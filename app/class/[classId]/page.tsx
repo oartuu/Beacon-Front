@@ -36,7 +36,7 @@ export default function page({ params }: PageProps) {
   const [lists, setLists] = useState<List[]>([]);
   const [name, setName] = useState("");
   const [shareToken, setShareToken] = useState("");
-  const shareLink = `http://192.168.5.15:3000/list/send/${shareToken}`
+  const shareLink = `https://beacon4u.vercel.app/list/send/${shareToken}`;
   useEffect(() => {
     const fetchLists = async () => {
       const token = localStorage.getItem("token");
