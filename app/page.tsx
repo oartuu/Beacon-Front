@@ -71,6 +71,10 @@ export default function Home() {
 
   }
 
+  const navigateToClass = (classId:string) =>{
+    router.push(`/class/${classId}`)
+  }
+
   return (
     <div className="h-dvh flex flex-col bg-zinc-100 ">
       <header className="bg-zinc-800 w-full h-18 flex justify-center items-center shadow-md">
@@ -85,7 +89,7 @@ export default function Home() {
 
       <main className="flex-1 flex flex-wrap items-start content-start  gap-2  p-4 overflow-auto">
         {classes.map((c) => (
-          <Card key={c.id} className="w-1/6  hover:cursor-pointer">
+          <Card onClick={()=> navigateToClass(c.id)} key={c.id} className="w-1/6  hover:cursor-pointer">
             <CardContent className="flex flex-col gap-4 items-center justify-center">
               <p>{c.name}</p>
               <School />
