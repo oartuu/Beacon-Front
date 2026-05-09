@@ -33,8 +33,6 @@ export default function Page({ params }: PageProps) {
   const onSubmit = async (formData:Inputs) => {
 
     try {
-      console.log("clicou");
-
       const response = await fetch(
         `https://beacon-api-liart.vercel.app/list/${shareToken}`,
         {
@@ -56,7 +54,7 @@ export default function Page({ params }: PageProps) {
         return;
       }
 
-      //router.replace("/list/done/");
+      router.replace("/list/done/");
     } catch (error) {
       console.log(error);
     }

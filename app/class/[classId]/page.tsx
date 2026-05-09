@@ -11,7 +11,7 @@ import {
 import { CirclePlus, School } from "lucide-react";
 import { use, useEffect, useState } from "react";
 import QRCode from "react-qr-code";
-
+import * as XLSX from "xlsx";
 interface PageProps {
   params: Promise<{
     classId: string;
@@ -60,6 +60,37 @@ export default function page({ params }: PageProps) {
     };
     fetchLists();
   }, []);
+
+
+  const exportToExcel = async () => {
+
+    const response = await fetch(`https://beacon-api-liart.vercel.app/list/${shareToken}`);
+    const data = await response.json();
+
+    // pega apenas os itens
+    const rows = data.itens
+      .sort((a: any, b: any) => a.name.localeCompare(b.name, "pt-BR", {
+        sensitivity:"base"
+      }))
+      .map((item: any) => ({
+        Nome: item.name,
+        Matricula: item.registration_number,
+        Data: new Date(item.createdAt).toLocaleString("pt-BR"),
+      }));
+
+    // cria planilha
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+
+    // cria workbook
+    const workbook = XLSX.utils.book_new();
+
+    // adiciona worksheet
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Lista");
+
+    // download do arquivo
+    XLSX.writeFile(workbook, `${data.name}.xlsx`);
+  };
+
 
   const handleCreateList = async () => {
     try {
@@ -161,10 +192,10 @@ export default function page({ params }: PageProps) {
               <QRCode value={shareLink}/>
 
               <Button
-                onClick={handleCreateList}
+                onClick={exportToExcel}
                 className="w-full mt-2 hover:cursor-pointer"
               >
-                Criar
+                Exportar
               </Button>
             </div>
           </DialogContent>
