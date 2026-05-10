@@ -8,8 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { CirclePlus, School } from "lucide-react";
+import { CirclePlus, NotebookTabs, School } from "lucide-react";
 import { use, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import QRCode from "react-qr-code";
 import * as XLSX from "xlsx";
 interface PageProps {
@@ -28,13 +29,20 @@ type List = {
   codeWindow: number;
   createdAt: string;
 };
-
+type Inputs = {
+  name:string
+}
 export default function page({ params }: PageProps) {
   const { classId } = use(params);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isListDialogOpen, setIsListDialogOpen] = useState(false);
   const [lists, setLists] = useState<List[]>([]);
-  const [name, setName] = useState("");
+    const {
+      register,
+      handleSubmit,
+      watch,
+      formState: { errors },
+    } = useForm<Inputs>();
   const [shareToken, setShareToken] = useState("");
   const shareLink = `https://beacon4u.vercel.app/list/send/${shareToken}`;
   useEffect(() => {
@@ -92,7 +100,7 @@ export default function page({ params }: PageProps) {
   };
 
 
-  const handleCreateList = async () => {
+  const onSubmit = async (formData:Inputs) => {
     try {
       const token = localStorage.getItem("token");
       const res = await fetch(
@@ -105,7 +113,7 @@ export default function page({ params }: PageProps) {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            name: name,
+            name: formData.name,
             classId: classId,
           }),
         },
@@ -138,10 +146,14 @@ export default function page({ params }: PageProps) {
 
       <main className="flex-1 flex flex-wrap items-start content-start  gap-2  p-4 overflow-auto">
         {lists.map((l) => (
-          <Card key={l.id} onClick={()=> handleShareList(l.shareToken)} className="w-1/6  hover:cursor-pointer">
+          <Card
+            key={l.id}
+            onClick={() => handleShareList(l.shareToken)}
+            className="w-1/6  hover:cursor-pointer"
+          >
             <CardContent className="flex flex-col gap-4 items-center justify-center">
               <p>{l.name}</p>
-              <School />
+              <NotebookTabs />
             </CardContent>
           </Card>
         ))}
@@ -165,15 +177,20 @@ export default function page({ params }: PageProps) {
               <div className="flex flex-col gap-2">
                 <label htmlFor="name">Nome</label>
                 <input
-                  className="shadow-lg pl-2 h-7.5"
+                  className="shadow-md border rounded-lg px-4 py-2 "
                   type="name"
-                  onChange={(e) => setName(e.target.value)}
-                  id="name"
+                  {...register("name", { required: "o nome é obrigatório" })}
                   placeholder="Insira o nome da lista"
                 />
+                {errors.name && (
+                  <span className="ml-2 text-xs font-light text-red-600 dark:text-red-400">
+                    {errors.name.message}
+                  </span>
+                )}
               </div>
+
               <Button
-                onClick={handleCreateList}
+                onClick={handleSubmit(onSubmit)}
                 className="w-full mt-2 hover:cursor-pointer"
               >
                 Criar
@@ -188,8 +205,7 @@ export default function page({ params }: PageProps) {
             </DialogHeader>
 
             <div className="flex flex-col items-center gap-2">
-              
-              <QRCode value={shareLink}/>
+              <QRCode value={shareLink} />
 
               <Button
                 onClick={exportToExcel}

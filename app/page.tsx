@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { CirclePlus, School } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 type Class = {
   id: string
@@ -13,13 +14,20 @@ type Class = {
   professorId: string
   createdAt: string
 }
-
+type Inputs ={
+  name:string
+}
 export default function Home() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [name, setName] = useState("")
   const [classes, setClasses] = useState<Class[]>([])
   const router = useRouter()
-  
+    const {
+      register,
+      handleSubmit,
+      watch,
+      formState: { errors },
+    } = useForm<Inputs>();
   useEffect(()=>{
     const fetchClasses = async () =>{
       const token = localStorage.getItem("token")
@@ -43,7 +51,7 @@ export default function Home() {
     fetchClasses()
   },[])
 
-  const handleCreateClass = async ()=> {
+  const onSubmit = async (formData:Inputs)=> {
 
     try {
       const token = localStorage.getItem("token")
@@ -55,7 +63,7 @@ export default function Home() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          name:name
+          name:formData.name
         })
       });
       
@@ -89,7 +97,11 @@ export default function Home() {
 
       <main className="flex-1 flex flex-wrap items-start content-start  gap-2  p-4 overflow-auto">
         {classes.map((c) => (
-          <Card onClick={()=> navigateToClass(c.id)} key={c.id} className="w-1/6  hover:cursor-pointer">
+          <Card
+            onClick={() => navigateToClass(c.id)}
+            key={c.id}
+            className="w-1/6  hover:cursor-pointer"
+          >
             <CardContent className="flex flex-col gap-4 items-center justify-center">
               <p>{c.name}</p>
               <School />
@@ -116,16 +128,23 @@ export default function Home() {
               <div className="flex flex-col gap-2">
                 <label htmlFor="name">Nome</label>
                 <input
-                  className="shadow-lg pl-2 h-7.5"
+                  className="shadow-md border rounded-lg px-4 py-2 "
                   type="name"
-                  onChange={(e) => setName(e.target.value)}
-                  id="name"
-                  placeholder="Insira o nome da turma"
+                  {...register("name", { required: "o nome é obrigatório" })}
+                  placeholder="Insira o nome da lista"
                 />
+                {errors.name && (
+                  <span className="ml-2 text-xs font-light text-red-600 dark:text-red-400">
+                    {errors.name.message}
+                  </span>
+                )}
               </div>
-              <Button onClick={handleCreateClass} className="w-full mt-2 hover:cursor-pointer">
+              <Button
+                onClick={handleSubmit(onSubmit)}
+                className="w-full mt-2 hover:cursor-pointer"
+              >
                 Criar
-              </Button >
+              </Button>
             </div>
           </DialogContent>
         </Dialog>

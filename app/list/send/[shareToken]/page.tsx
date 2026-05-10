@@ -80,7 +80,7 @@ export default function Page({ params }: PageProps) {
               <label htmlFor="registration_number">Matrícula</label>
 
               <input
-                className="shadow-lg pl-2 h-10 border"
+                className="shadow-md border rounded-lg px-4 py-2 "
                 type="text"
                 {...register("registration_number", { required: true })}
                 placeholder="Insira sua matrícula"
@@ -96,7 +96,7 @@ export default function Page({ params }: PageProps) {
               <label htmlFor="name">Nome</label>
 
               <input
-                className="shadow-lg pl-2 h-10 border"
+                className="shadow-md border rounded-lg px-4 py-2 "
                 type="text"
                 {...register("name", { required: true })}
                 placeholder="Insira seu nome"
