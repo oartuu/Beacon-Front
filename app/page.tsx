@@ -84,7 +84,7 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row gap-4">
             <Button
               size="lg"
-              onClick={() => handleRedirect("/register")}
+              onClick={() => handleRedirect("/auth/register")}
               className="rounded-2xl px-8 py-6 bg-zinc-950 text-zinc-100 hover:bg-zinc-800 cursor-pointer"
             >
               Começar gratuitamente
@@ -93,7 +93,7 @@ export default function LandingPage() {
             <Button
               size="lg"
               variant="outline"
-              onClick={() => handleRedirect("/login")}
+              onClick={() => handleRedirect("/auth/login")}
               className="rounded-2xl px-8 py-6 border-zinc-300 bg-white hover:bg-zinc-200 cursor-pointer"
             >
               Já tenho conta
@@ -262,7 +262,7 @@ export default function LandingPage() {
 
           <Button
             size="lg"
-            onClick={() => handleRedirect("/register")}
+            onClick={() => handleRedirect("/auth/register")}
             className="rounded-2xl px-10 py-7 text-lg bg-zinc-950 text-zinc-100 hover:bg-zinc-800 cursor-pointer"
           >
             Criar minha conta
