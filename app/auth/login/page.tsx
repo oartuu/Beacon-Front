@@ -61,7 +61,7 @@ export default function page() {
       // ✅ só executa se login funcionar
       localStorage.setItem("token", data.access_token);
 
-      router.push("/");
+      router.push("/class");
     } catch (error: any) {
       console.log(error.message);
     }
