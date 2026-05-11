@@ -12,6 +12,8 @@ import { CirclePlus, School } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { getToken,logout } from "@/lib/auth";
+
 
 type Class = {
   id: string;
@@ -35,22 +37,45 @@ export default function Home() {
   } = useForm<Inputs>();
   useEffect(() => {
     const fetchClasses = async () => {
-      const token = localStorage.getItem("token");
-      const res = await fetch("https://beacon-api-liart.vercel.app/class/", {
-        method: "GET",
+      try {
+        const token = getToken();
 
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const jsonData = await res.json();
-      setClasses(jsonData);
+        // sem token → login
+        if (!token) {
+          router.push("/auth/login");
+          return;
+        }
 
-      console.log(jsonData);
+        const res = await fetch("https://beacon-api-liart.vercel.app/class/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // token expirado/inválido
+        if (res.status === 401) {
+          logout();
+          router.push("/auth/login");
+          return;
+        }
+
+        // qualquer outro erro
+        if (!res.ok) {
+          throw new Error("Erro ao buscar turmas");
+        }
+
+        const jsonData = await res.json();
+
+        setClasses(jsonData);
+      } catch (error) {
+        console.error(error);
+      }
     };
+
     fetchClasses();
-  }, []);
+  }, [router]);
 
   const onSubmit = async (formData: Inputs) => {
     try {

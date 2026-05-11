@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { CirclePlus, NotebookTabs, School } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import QRCode from "react-qr-code";
@@ -35,6 +36,7 @@ type Inputs = {
 export default function page({ params }: PageProps) {
   const { classId } = use(params);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const router = useRouter()
   const [isListDialogOpen, setIsListDialogOpen] = useState(false);
   const [lists, setLists] = useState<List[]>([]);
     const {
@@ -47,27 +49,54 @@ export default function page({ params }: PageProps) {
   const shareLink = `https://beacon4u.vercel.app/list/send/${shareToken}`;
   useEffect(() => {
     const fetchLists = async () => {
-      const token = localStorage.getItem("token");
-      const res = await fetch(
-        "https://beacon-api-liart.vercel.app/class/lists",
-        {
-          method: "POST",
+      try {
+        const token = localStorage.getItem("token");
 
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+        // sem token
+        if (!token) {
+          router.push("/auth/login");
+          return;
+        }
+
+        const res = await fetch(
+          "https://beacon-api-liart.vercel.app/class/lists",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+
+            body: JSON.stringify({
+              classId: classId,
+            }),
           },
-          body: JSON.stringify({
-            classId: classId,
-          }),
-        },
-      );
+        );
 
-      const jsonData = await res.json();
-      setLists(jsonData);
+        // token expirado/inválido
+        if (res.status === 401) {
+          localStorage.removeItem("token");
+
+          router.push("/auth/login");
+          return;
+        }
+
+        // outros erros
+        if (!res.ok) {
+          throw new Error("Erro ao buscar listas");
+        }
+
+        const jsonData = await res.json();
+
+        setLists(jsonData);
+      } catch (error) {
+        console.error(error);
+      }
     };
+
     fetchLists();
-  }, []);
+  }, [classId, router]);
 
 
   const exportToExcel = async () => {
