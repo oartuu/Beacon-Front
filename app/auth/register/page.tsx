@@ -82,7 +82,7 @@ export default function page() {
 
   return (
     <main className="h-dvh bg-black flex items-center justify-center">
-      <Card className="w-1/3 ">
+      <Card className="md:w-1/3 w-[95%]">
         <CardHeader className="text-2xl font-bold">Cadastro: </CardHeader>
         <CardContent className="flex flex-col gap-2">
           <div className="flex flex-col gap-2">

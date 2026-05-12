@@ -61,12 +61,12 @@ export default function LandingPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-zinc-100 text-zinc-950 overflow-hidden">
+    <main className="min-h-screen max-w-dvw bg-zinc-100 text-zinc-950 overflow-x-hidden">
       {/* Background glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-zinc-300/50 blur-3xl rounded-full pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2  md:w-175 w-sm h-175 bg-zinc-300/50 blur-3xl rounded-full pointer-events-none" />
 
       {/* HERO */}
-      <section className="relative w-full px-6 py-28 flex flex-col items-center text-center">
+      <section className="relative w-full px-6 py-28 flex flex-col items-center text-center overflow-hidden">
         <div className="max-w-5xl flex flex-col items-center gap-8">
           <div className="bg-white border border-zinc-200 px-4 py-2 rounded-full text-sm text-zinc-600 shadow-sm">
             Plataforma moderna para chamadas virtuais
@@ -104,7 +104,7 @@ export default function LandingPage() {
         {/* Dashboard Mockup */}
         <div className="mt-24 w-full max-w-6xl">
           <div className="relative rounded-3xl border border-zinc-200 bg-white shadow-2xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-zinc-200/30 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-linear-to-br from-zinc-200/30 to-transparent pointer-events-none" />
 
             <div className="grid md:grid-cols-2 gap-8 p-8 md:p-12">
               {/* Left Side */}
@@ -139,7 +139,7 @@ export default function LandingPage() {
               </div>
 
               {/* Right Side */}
-              <div className="flex flex-col gap-6">
+              <div className="flex flex-col gap-6 ">
                 <div className="bg-zinc-100 border border-zinc-200 rounded-2xl p-6">
                   <div className="flex items-center gap-3 mb-4">
                     <QrCode className="w-6 h-6" />
@@ -212,7 +212,7 @@ export default function LandingPage() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="w-full bg-white border-y border-zinc-200">
+      <section className="w-full bg-white border-y border-zinc-200 ">
         <div className="max-w-6xl mx-auto px-6 py-24">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -249,7 +249,7 @@ export default function LandingPage() {
       {/* CTA */}
       <section className="w-full px-6 py-28 flex justify-center">
         <div className="max-w-5xl w-full bg-white border border-zinc-200 rounded-[2rem] p-10 md:p-16 text-center relative overflow-hidden shadow-xl">
-          <div className="absolute inset-0 bg-gradient-to-r from-zinc-200/20 to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-linear-to-r from-zinc-200/20 to-transparent pointer-events-none" />
 
           <h2 className="text-4xl md:text-6xl font-black mb-6">
             Modernize suas chamadas hoje.
