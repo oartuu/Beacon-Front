@@ -173,7 +173,7 @@ export default function page({ params }: PageProps) {
     setShareToken(shareToken);
   };
   return (
-    <div className="h-dvh flex flex-col bg-zinc-100 ">
+    <div className="h-dvh flex flex-col bg-zinc-100 dark:bg-zinc-900 ">
       <header className="bg-zinc-800 w-full px-4 h-18 flex justify-between items-center shadow-md">
         <div>
           <Breadcrumb>
@@ -200,9 +200,8 @@ export default function page({ params }: PageProps) {
 
         <div>
           <Button
-            variant={"outline"}
             size={"lg"}
-            className=" flex justify-between hover:cursor-pointer"
+            className=" flex justify-between hover:cursor-pointer bg-zinc-100 text-zinc-900"
             onClick={() => setIsDialogOpen(true)}
           >
             <Plus />
@@ -213,14 +212,14 @@ export default function page({ params }: PageProps) {
 
       <main className="flex-1 flex flex-col gap-2  p-4 overflow-auto">
         {lists.map((l) => (
-          <Item key={l.id} className="bg-zinc-800 shadow-lg " asChild>
+          <Item key={l.id} variant="muted" className=" shadow-lg " asChild>
             <Link  href={`/list/${l.shareToken}`}>
               <ItemMedia variant="icon">
-                <NotebookTabs className="text-zinc-100" />
+                <NotebookTabs/>
               </ItemMedia>
               <ItemContent >
-                <ItemTitle className="text-zinc-100">{l.name}</ItemTitle>
-                <ItemDescription className="text-zinc-300">
+                <ItemTitle >{l.name}</ItemTitle>
+                <ItemDescription>
                   class name
                 </ItemDescription>
               </ItemContent>
